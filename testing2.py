@@ -8,7 +8,7 @@ scaler = joblib.load("scaler_rfe.joblib")
 top_features = joblib.load("rfe_features.joblib")
 
 # ---------------- Load new dataset ----------------
-new_file = "VBM data_new.xlsx"  # Replace with your new Excel file
+new_file = "VBM data.xlsx"  # Replace with your new Excel file
 new_df = pd.read_excel(new_file)
 new_df.columns = new_df.columns.str.strip().str.replace("'", "")
 
