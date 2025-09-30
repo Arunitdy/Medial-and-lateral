@@ -91,3 +91,20 @@ joblib.dump(scaler, "scaler_top15.joblib")
 joblib.dump(top_features, "top15_features.joblib")
 
 print("\nSVM model, scaler, and top 15 features saved successfully!")
+
+# ---------------- Feature Importance for Linear SVM ----------------
+feature_importance = np.abs(svm_best.coef_[0])  # Coefficients for linear SVM
+importance_df = pd.DataFrame({
+    'Feature': top_features,
+    'Importance': feature_importance
+}).sort_values(by='Importance', ascending=False)
+
+print("\n--- Feature Importance (Linear SVM) ---")
+print(importance_df)
+
+# ---------------- Confusion Matrix on full dataset ----------------
+y_pred_full = svm_best.predict(X_scaled)
+cm_full = confusion_matrix(y, y_pred_full)
+
+print("\n--- Confusion Matrix (Full Dataset) ---")
+print(cm_full)
