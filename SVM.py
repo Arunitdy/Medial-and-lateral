@@ -8,10 +8,13 @@ from sklearn.metrics import accuracy_score, classification_report, confusion_mat
 file_name = "VBM data.xlsx"
 df = pd.read_excel(file_name)
 
-# Target column (update if your label column has a different name, e.g., "Diagnosis" or "Group")
+# Strip column names to remove leading/trailing spaces or quotes
+df.columns = df.columns.str.strip().str.replace("'", "")
+
+# Target column (replace with your label column)
 target_col = "Group"
 
-# Features to use
+# Selected features (after stripping, they should match exactly)
 selected_features = [
     "Cerebellar Vermal Lobules VI-VII",
     "Left PCu precuneus",
@@ -19,14 +22,22 @@ selected_features = [
     "Right PoG postcentral gyrus"
 ]
 
+# Check if all features exist
+missing_features = [f for f in selected_features if f not in df.columns]
+if missing_features:
+    print("Missing features in the dataset:", missing_features)
+    exit()
+
 # Subset dataset
 X = df[selected_features]
 y = df[target_col]
 
 # Split train/test
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42, stratify=y
+)
 
-# Scale features (important for SVM)
+# Scale features
 scaler = StandardScaler()
 X_train_scaled = scaler.fit_transform(X_train)
 X_test_scaled = scaler.transform(X_test)
